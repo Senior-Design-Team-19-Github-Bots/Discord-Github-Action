@@ -14,7 +14,7 @@ PULL_REQUEST_URL = "https://github.com/{repository}/pull/{number}"
 WEBHOOK_USERNAME = "GitHub Actions"
 WEBHOOK_AVATAR_URL = (
     "https://raw.githubusercontent.com/"
-    "SebastiaanZ/github-status-embed-for-discord/main/"
+    "893091483/Discord-embed/main/"
     "github_actions_avatar.png"
 )
 FIELD_CHARACTER_BUDGET = 60
