@@ -2,7 +2,6 @@ name: GitHub Actions Status Embed for Discord
 author: Sebastiaan Zeeff
 description: Send an enhanced GitHub Actions status embed to a Discord webhook
 
-# 存到parser（__main__.py)
 inputs:
   workflow_name:
     description: 'name of the workflow'

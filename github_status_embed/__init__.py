@@ -7,8 +7,3 @@ of information and are send for every workflow run. This application,
 part of a Docker-based action, allows you to send more meaningful embeds
 when you want to send them.
 """
-
-# 阅读顺序（根据__main__.py)
-# 1. log.py
-# 2. types.py
-# 3. webhook.py
