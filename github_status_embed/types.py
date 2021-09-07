@@ -82,7 +82,7 @@ class TypedDataclass:
         return cls(**kwargs)
 
 
-class WorkflowStatus(enum.Enum):
+class Workflow (enum.Enum):
     """An Enum subclass that represents the workflow status."""
 
     SUCCESS = {"verb": "succeeded", "adjective": "Successful", "color": 38912}
@@ -275,6 +275,86 @@ class PullRequest(TypedDataclass, optional=True):
             pr_source = f"{pr_source[:stop]}..."
 
         return pr_source
+    
+@dataclasses.dataclass(frozen=True)
+class Issue(TypedDataclass, optional=True):
+    """
+    Dataclass to hold the PR-related arguments.
+
+    The attributes names are equal to argument names in the GitHub Actions
+    specification to allow for helpful error messages. To provide a convenient
+    public API, property getters were used with less redundant information in
+    the naming scheme.
+    """
+
+    issue_author_login: str
+    isssue_number: int
+    issue_title: str
+    issue_status: str
+
+    @classmethod
+    def from_payload(cls, arguments: typing.Dict[str, str]) -> typing.Optional[Issue]:
+        """Create a Pull Request instance from Pull Request Payload JSON."""
+        # Safe load the JSON Payload provided as a command line argument.
+        raw_payload = arguments.pop('pull_request_payload').replace("\\", "\\\\")
+        log.debug(f"Attempting to parse PR Payload JSON: {raw_payload!r}.")
+        try:
+            payload = json.loads(raw_payload)
+        except json.JSONDecodeError:
+            log.debug("Failed to parse JSON, dropping down to empty payload")
+            payload = {}
+        else:
+            log.debug("Successfully parsed parsed payload")
+
+        # If the payload contains multiple PRs in a list, use the first one.
+        if isinstance(payload, list):
+            log.debug("The payload contained a list, extracting first issue.")
+            payload = payload[0] if payload else {}
+
+        if not payload:
+            log.warning("Issue payload could not be parsed, attempting regular pr arguments.")
+            return cls.from_arguments(arguments)
+
+        # Get the target arguments from the payload, yielding similar results
+        # when keys are missing as to when their corresponding arguments are
+        # missing.
+        arguments["issue_author_login"] = payload.get('user', {}).get('login', '')
+        arguments["issue_number"] = payload.get('number', '')
+        arguments["issue_title"] = payload.get('title', '')
+        arguments["issue_status"] = payload.get('state', '')
+
+        return cls.from_arguments(arguments)
+
+    @property
+    def author(self) -> str:
+        """Return the `issue_author_login` field."""
+        return self.issue_author_login
+
+    @property
+    def author_url(self) -> str:
+        """Return a URL for the author's profile."""
+        return f"https://github.com/{self.issue_author_login}"
+
+    @property
+    def number(self) -> int:
+        """Return the `pr_number`."""
+        return self.issue_number
+
+    @property
+    def title(self) -> str:
+        """Return the title of the PR."""
+        return self.issue_title
+
+    @property
+    def status(self) -> str:
+        """Return the title of the PR."""
+        return self.issue_status
+
+
+
+
+
+
 
 
 class AllowedMentions(typing.TypedDict, total=False):

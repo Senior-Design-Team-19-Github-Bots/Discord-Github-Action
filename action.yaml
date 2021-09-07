@@ -65,6 +65,22 @@ inputs:
   pr_source:
     description: 'source of the Pull Request'
     required: false
+  
+  issue_author_login:
+    description: 'login of the issue author'
+    required: false
+
+  issue_number:
+    description: 'number of the issue'
+    required: false
+
+  issue_title:
+    description: 'title of the issue'
+    required: false
+
+  issue_status:
+    description: 'title of the issue'
+    required: false
 
   pull_request_payload:
     description: 'Pull Request in jSON payload form'
@@ -99,10 +115,19 @@ runs:
     - ${{ inputs.pr_number }}
     - ${{ inputs.pr_title }}
     - ${{ inputs.pr_source }}
+    - ${{ inputs.issue_author_login }}
+    - ${{ inputs.issue_number }}
+    - ${{ inputs.issue_title}}
+    - ${{ inputs.issue_status}}
     - ${{ inputs.pull_request_payload }}
     - ${{ inputs.debug }}
     - ${{ inputs.dry_run }}
 
+
+        
+      
+        
+        
 branding:
   icon: 'check-circle'
   color: 'green'
