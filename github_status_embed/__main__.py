@@ -74,8 +74,6 @@ if __name__ == "__main__":
         pull_request = PullRequest.from_arguments(arguments)
         success = send_webhook(workflow, webhook, pull_request, dry_run)
 
-  
-
     if not success:
         log.debug("Exiting with status code 1")
         sys.exit(1)
