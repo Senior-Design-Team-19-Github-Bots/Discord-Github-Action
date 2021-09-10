@@ -72,7 +72,8 @@ if __name__ == "__main__":
         success = send_webhook(workflow, webhook, issue, dry_run)
     else:
         pull_request = PullRequest.from_arguments(arguments)
-        success = send_webhook(workflow, webhook, pull_request,issue=None, dry_run)
+        issue=None
+        success = send_webhook(workflow, webhook, pull_request, dry_run)
 
     if not success:
         log.debug("Exiting with status code 1")
