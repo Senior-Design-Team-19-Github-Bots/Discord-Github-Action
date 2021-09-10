@@ -167,7 +167,7 @@ def send_webhook(
 ) -> bool:
     """Send an embed to specified webhook."""
     if issue is not None:
-        log.debug("Creating payload for Pull Request Check")
+        log.debug("Creating payload for Issue Check")
         payload = get_payload_issue(workflow, pull_request)
     elif pull_request is not None:
         log.debug("Creating payload for Pull Request Check")
