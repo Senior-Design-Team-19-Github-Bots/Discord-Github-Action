@@ -122,11 +122,7 @@ runs:
     - ${{ inputs.pull_request_payload }}
     - ${{ inputs.debug }}
     - ${{ inputs.dry_run }}
-
-
-        
-      
-        
+ 
         
 branding:
   icon: 'check-circle'

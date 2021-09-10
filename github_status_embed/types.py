@@ -280,7 +280,7 @@ class PullRequest(TypedDataclass, optional=True):
 class Issue(TypedDataclass, optional=True):
     """
     Dataclass to hold the PR-related arguments.
-
+    
     The attributes names are equal to argument names in the GitHub Actions
     specification to allow for helpful error messages. To provide a convenient
     public API, property getters were used with less redundant information in
@@ -349,13 +349,6 @@ class Issue(TypedDataclass, optional=True):
     def status(self) -> str:
         """Return the title of the PR."""
         return self.issue_status
-
-
-
-
-
-
-
 
 class AllowedMentions(typing.TypedDict, total=False):
     """A TypedDict to represent the AllowedMentions in a webhook payload."""
