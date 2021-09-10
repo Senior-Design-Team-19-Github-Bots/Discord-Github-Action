@@ -82,7 +82,7 @@ class TypedDataclass:
         return cls(**kwargs)
 
 
-class Workflow (enum.Enum):
+class WorkflowStatus (enum.Enum):
     """An Enum subclass that represents the workflow status."""
 
     SUCCESS = {"verb": "succeeded", "adjective": "Successful", "color": 38912}
@@ -280,7 +280,7 @@ class PullRequest(TypedDataclass, optional=True):
 class Issue(TypedDataclass, optional=True):
     """
     Dataclass to hold the PR-related arguments.
-    
+
     The attributes names are equal to argument names in the GitHub Actions
     specification to allow for helpful error messages. To provide a convenient
     public API, property getters were used with less redundant information in
