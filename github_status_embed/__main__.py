@@ -66,10 +66,12 @@ if __name__ == "__main__":
     if arguments.get("pull_request_payload", False):
         log.warning("The use of `pull_request_payload` is deprecated and will be removed in v1.0.0")
         pull_request = PullRequest.from_payload(arguments)
-        success = send_webhook(workflow, webhook, pull_request, dry_run)
+        issue = None
+        success = send_webhook(workflow, webhook, pull_request,issue, dry_run)
     elif arguments.get("pr_number", False):
         issue = Issue.from_payload(arguments)
-        success = send_webhook(workflow, webhook, issue, dry_run)
+        pull_request = None
+        success = send_webhook(workflow, webhook,pull_request, issue, dry_run)
     else:
         pull_request = PullRequest.from_arguments(arguments)
         issue=None
