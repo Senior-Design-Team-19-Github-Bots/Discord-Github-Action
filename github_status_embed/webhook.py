@@ -75,7 +75,7 @@ def get_payload_issue(
 ) -> types.WebhookPayload:
     """Create a WebhookPayload with information about a Pull Request."""
     # Calculate the character budget for the Source Branch field
-    print"type(issue)"
+    print(type(issue))
     author = issue.issue_author_login
     workflow_number = f"{workflow.name} #{workflow.number}"
     status = issue.issue_status
