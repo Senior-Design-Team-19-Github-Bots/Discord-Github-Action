@@ -6,7 +6,6 @@ on:
       - main
   pull_request:
 
-
 jobs:
   lint:
     name: Run pre-commit & flake8
