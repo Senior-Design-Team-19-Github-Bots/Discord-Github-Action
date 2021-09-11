@@ -38,7 +38,6 @@ except FileNotFoundError:
         action_specs = action_file.read_text(encoding="utf-8")
     except FileNotFoundError:
         raise MissingActionFile("the `action.yaml` can't be found!") from None
-print(action_specs)
 # Now that we've loaded the specifications of our action, extract the inputs
 # and their description to register CLI arguments.
 action_specs = yaml.safe_load(action_specs)
@@ -48,9 +47,9 @@ for argument, configuration in action_specs["inputs"].items():
 
 if __name__ == "__main__":
     arguments = vars(parser.parse_args())
+    print(arguments)
     debug = arguments.pop('debug') not in ('', '0', 'false')
     dry_run = arguments.pop('dry_run') not in ('', '0', 'false')
-
     # Set up logging and make sure to mask the webhook_token in log records
     level = logging.DEBUG if debug else logging.WARNING
     setup_logging(level, masked_values=[arguments['webhook_token']])
