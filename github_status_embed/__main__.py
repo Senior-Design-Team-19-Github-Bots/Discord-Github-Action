@@ -47,7 +47,6 @@ for argument, configuration in action_specs["inputs"].items():
 
 if __name__ == "__main__":
     arguments = vars(parser.parse_args())
-    print(arguments)
     debug = arguments.pop('debug') not in ('', '0', 'false')
     dry_run = arguments.pop('dry_run') not in ('', '0', 'false')
     # Set up logging and make sure to mask the webhook_token in log records
