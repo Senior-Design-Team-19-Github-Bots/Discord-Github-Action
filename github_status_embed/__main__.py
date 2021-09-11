@@ -38,7 +38,7 @@ except FileNotFoundError:
         action_specs = action_file.read_text(encoding="utf-8")
     except FileNotFoundError:
         raise MissingActionFile("the `action.yaml` can't be found!") from None
-print(action_specs）
+print(action_specs)
 # Now that we've loaded the specifications of our action, extract the inputs
 # and their description to register CLI arguments.
 action_specs = yaml.safe_load(action_specs)
