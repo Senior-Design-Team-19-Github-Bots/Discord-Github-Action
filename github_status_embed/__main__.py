@@ -62,12 +62,12 @@ if __name__ == "__main__":
     # Extract Action arguments by creating dataclasses
     workflow = Workflow.from_arguments(arguments)
     webhook = Webhook.from_arguments(arguments)
-    if arguments.get("pull_request_payload", False):
+    if arguments.get("pr_number", True):
         log.warning("The use of `pull_request_payload` is deprecated and will be removed in v1.0.0")
         pull_request = PullRequest.from_payload(arguments)
         issue = None
         success = send_webhook(workflow, webhook, pull_request,issue, dry_run)
-    elif arguments.get("pr_number", False):
+    elif arguments.get("issue_number",  True):
         issue = Issue.from_payload(arguments)
         pull_request = None
         success = send_webhook(workflow, webhook,pull_request, issue, dry_run)
