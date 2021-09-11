@@ -42,9 +42,10 @@ except FileNotFoundError:
 # Now that we've loaded the specifications of our action, extract the inputs
 # and their description to register CLI arguments.
 action_specs = yaml.safe_load(action_specs)
+print(action_specs）
 for argument, configuration in action_specs["inputs"].items():
     parser.add_argument(argument, help=configuration["description"])
-
+    
 
 if __name__ == "__main__":
     arguments = vars(parser.parse_args())
