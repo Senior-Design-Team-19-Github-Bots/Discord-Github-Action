@@ -288,7 +288,7 @@ class Issue(TypedDataclass, optional=True):
     """
 
     issue_author_login: str
-    isssue_number: int
+    issue_number: int
     issue_title: str
     issue_status: str
 
