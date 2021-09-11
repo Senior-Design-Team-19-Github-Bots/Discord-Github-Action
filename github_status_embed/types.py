@@ -306,15 +306,6 @@ class Issue(TypedDataclass, optional=True):
         else:
             log.debug("Successfully parsed parsed payload")
 
-        # If the payload contains multiple PRs in a list, use the first one.
-        if isinstance(payload, list):
-            log.debug("The payload contained a list, extracting first issue.")
-            payload = payload[0] if payload else {}
-
-        if not payload:
-            log.warning("Issue payload could not be parsed, attempting regular pr arguments.")
-            return cls.from_arguments(arguments)
-
         # Get the target arguments from the payload, yielding similar results
         # when keys are missing as to when their corresponding arguments are
         # missing.
