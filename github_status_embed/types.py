@@ -227,6 +227,7 @@ class PullRequest(TypedDataclass, optional=True):
         if not payload:
             log.warning("PR payload could not be parsed, attempting regular pr arguments.")
             return cls.from_arguments(arguments)
+        
 
         # Get the target arguments from the payload, yielding similar results
         # when keys are missing as to when their corresponding arguments are
@@ -261,7 +262,7 @@ class PullRequest(TypedDataclass, optional=True):
     def shortened_source(self, length: int, owner: typing.Optional[str] = None) -> str:
         """Returned a shortened representation of the source branch."""
         pr_source = self.pr_source
-
+    
         # This removes the owner prefix in the source field if it matches
         # the current repository. This means that it will only be displayed
         # when the PR is made from a branch on a fork.
@@ -305,6 +306,14 @@ class Issue(TypedDataclass, optional=True):
             payload = {}
         else:
             log.debug("Successfully parsed parsed payload")
+         # If the payload contains multiple PRs in a list, use the first one.
+        if isinstance(payload, list):
+            log.debug("The payload contained a list, extracting first Issue.")
+            payload = payload[0] if payload else {}
+
+        if not payload:
+            log.warning("Issue payload could not be parsed, attempting regular issue arguments.")
+            return cls.from_arguments(arguments)
 
         # Get the target arguments from the payload, yielding similar results
         # when keys are missing as to when their corresponding arguments are
