@@ -15,7 +15,7 @@ ISSUE_URL = "https://github.com/{repository}/issues/{number}"
 WEBHOOK_USERNAME = "GitHub Actions"
 WEBHOOK_AVATAR_URL = (
     "https://raw.githubusercontent.com/"
-    "893091483/Discord-embed/main/"
+    "Senior-Design-Team-19-Github-Bots/Discord-Github-Action/main/"
     "github_actions_avatar.png"
 )
 FIELD_CHARACTER_BUDGET = 60
