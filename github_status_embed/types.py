@@ -312,7 +312,6 @@ class Issue(TypedDataclass, optional=True):
             payload = payload[0] if payload else {}
 
         if not payload:
-            log.warning("Issue payload could not be parsed, attempting regular issue arguments.")
             return cls.from_arguments(arguments)
 
         # Get the target arguments from the payload, yielding similar results
