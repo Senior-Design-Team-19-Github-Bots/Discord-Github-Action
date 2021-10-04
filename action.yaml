@@ -1,5 +1,5 @@
 name: GitHub Actions Status Embed for Discord
-author: Sebastiaan Zeeff
+author: Sebastiaan Zeeff && Jialin Zheng
 description: Send an enhanced GitHub Actions status embed to a Discord webhook
 
 inputs:
