@@ -65,6 +65,10 @@ jobs:
         pr_number: ${{ github.event.pull_request.number }}
         pr_title: ${{ github.event.pull_request.title }}
         pr_source: ${{ github.event.pull_request.head.label }}
+        issue_author_login: ${{ github.event.issue.user.login }}
+        issue_number: ${{ github.event.issue.number }}
+        issue_title: ${{ github.event.issue.title }}
+        issue_status: ${{ github.event.issue.state }}
 ```
 
 ### Command specification
