@@ -87,6 +87,10 @@ jobs:
 | pr_number | Pull Request number | (optional)¹ |
 | pr_title | Title of the Pull Request | (optional)¹ |
 | pr_source | Source branch for the Pull Request | (optional)¹ |
+| issue_author_login | **Login** of the issue author | (optional)¹ |
+| issue_number | issue number | (optional)¹ |
+| issue_title | Title of the issue | (optional)¹ |
+| issue_status |issue status for the issue | (optional)¹ |
 | debug | set to "true" to turn on debug logging | false |
 | dry_run | set to "true" to not send the webhook request | false |
 | pull_request_payload | PR payload in JSON format² **(deprecated)** | (deprecated)³ |
@@ -208,4 +212,8 @@ jobs:
           pr_number: ${{ steps.pr_info.outputs.pr_number }}
           pr_title: ${{ steps.pr_info.outputs.pr_title }}
           pr_source: ${{ steps.pr_info.outputs.pr_source }}
+          issue_author_login: ${{ github.event.issue.user.login }}
+          issue_number: ${{ github.event.issue.number }}
+          issue_title: ${{ github.event.issue.title }}
+          issue_status: ${{ github.event.issue.state }}
 ```
