@@ -280,7 +280,7 @@ class PullRequest(TypedDataclass, optional=True):
 @dataclasses.dataclass(frozen=True)
 class Issue(TypedDataclass, optional=True):
     """
-    Dataclass to hold the PR-related arguments.
+    Dataclass to hold the Issue-related arguments.
 
     The attributes names are equal to argument names in the GitHub Actions
     specification to allow for helpful error messages. To provide a convenient
@@ -295,8 +295,8 @@ class Issue(TypedDataclass, optional=True):
 
     @classmethod
     def from_payload(cls, arguments: typing.Dict[str, str]) -> typing.Optional[Issue]:
-        """Create a Pull Request instance from Pull Request Payload JSON."""
-        # Safe load the JSON Payload provided as a command line argument.
+        """Create a issue instance and pop out pull_request_payload arguement."""
+        
         raw_payload = arguments.pop('pull_request_payload').replace("\\", "\\\\")
         log.debug(f"Attempting to parse PR Payload JSON: {raw_payload!r}.")
         try:
