@@ -1,6 +1,9 @@
 # GitHub Actions Status Embed for Discord
 _Send enhanced and informational GitHub Actions status embeds to Discord webhooks._
 
+# How to Set up 
+
+
 ## Why?
 
 The default status embeds GitHub delivers for workflow runs are very basic: They contain the name of repository, the result of the workflow run (but not the name!), and the branch that served as the context for the workflow run. If the workflow was triggered by a pull request from a fork, the embed does not even differentatiate between branches on the fork and the base repository: The "master" branch in the example below actually refers to the "master" branch of a fork!
@@ -20,9 +23,9 @@ As you can see, the standard embeds on the left don't contain a lot of informati
 
 Having a custom action also lets you deliver embeds to webhooks when you want to. If you want, you can only send embeds for failing jobs or only at the end of your sequence of chained workflows.
 
-## General Workflow Runs & PRs
+## General Workflow Runs & PRs & Issue
 
-When a workflow is triggered for a Pull Request, it's natural to include a bit of information about the Pull Request in the embed to give context to the result. However, when a workflow is triggered for another event, there's no Pull Request involved, which also means we can't include information about that non-existant PR in the embed. That's why the Action automatically tailores the embed towards a PR if PR information is provided and tailors it towards a general workflow run if not.
+When a workflow is triggered for a Pull Request or Issue, it's natural to include a bit of information about the Pull Request or issue in the embed to give context to the result. However, when a workflow is triggered for another event, there's no Pull Request involved (commit), which also means we can't include information about that non-existant PR in the embed. That's why the Action automatically tailores the embed towards a PR if PR information is provided and tailors it towards a general workflow run if not.
 
 Spot the difference:
 
@@ -107,117 +110,5 @@ jobs:
 
 3) Providing a JSON payload will take precedence over the individual pr arguments. If a JSON payload is present, it will be used and the individual pr arguments will be ignored, unless parsing the JSON fails.
 
-## Recipes
-
-### Reporting the status of a `pull_request`-triggered workflow
-
-One complication with `pull_request`-triggered workflows is that your secrets won't be available if the workflow is triggered for a pull request made from a fork. As you'd typically provide the webhook token as a secret, this makes using this action in such a workflow slightly more complicated.
-
-However, GitHub has provided an additional workflow trigger specifically for this situation: [`workflow_run`](https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows#workflow_run). You can use this event to start a workflow whenever another workflow is being run or has just finished. As workflows triggered by `workflow_run` always run in the base repository, it has full access to your secrets.
-
-To give your `workflow_run`-triggered workflow access to all the information we need to build a Pull Request status embed, you'll need to share some details from the original workflow in some way. One way to do that is by uploading an artifact. To do that, add these two steps to the end of your `pull_request`-triggered workflow:
-
-```yaml
-name: Lint & Test
-
-on:
-  pull_request:
-
-
-jobs:
-  lint-test:
-    runs-on: ubuntu-latest
-
-    steps:
-      # Your regular steps here
-
-      # -------------------------------------------------------------------------------
-
-      # Prepare the Pull Request Payload artifact. If this fails, we
-      # we fail silently using the `continue-on-error` option. It's
-      # nice if this succeeds, but if it fails for any reason, it
-      # does not mean that our lint-test checks failed.
-      - name: Prepare Pull Request Payload artifact
-        id: prepare-artifact
-        if: always() && github.event_name == 'pull_request'
-        continue-on-error: true
-        run: cat $GITHUB_EVENT_PATH | jq '.pull_request' > pull_request_payload.json
-
-      # This only makes sense if the previous step succeeded. To
-      # get the original outcome of the previous step before the
-      # `continue-on-error` conclusion is applied, we use the
-      # `.outcome` value. This step also fails silently.
-      - name: Upload a Build Artifact
-        if: always() && steps.prepare-artifact.outcome == 'success'
-        continue-on-error: true
-        uses: actions/upload-artifact@v2
-        with:
-          name: pull-request-payload
-          path: pull_request_payload.json
-```
-
-Then, add a new workflow that is triggered whenever the workflow above is run:
-
-```yaml
-name: Status Embed
-
-on:
-  workflow_run:
-    workflows:
-      - Lint & Test
-    types:
-      - completed
-
-jobs:
-  status_embed:
-    name:  Send Status Embed to Discord
-    runs-on: ubuntu-latest
-
-    steps:
-      # Process the artifact uploaded in the `pull_request`-triggered workflow:
-      - name: Get Pull Request Information
-        id: pr_info
-        if: github.event.workflow_run.event == 'pull_request'
-        run: |
-          curl -s -H "Authorization: token $GITHUB_TOKEN" ${{ github.event.workflow_run.artifacts_url }} > artifacts.json
-          DOWNLOAD_URL=$(cat artifacts.json | jq -r '.artifacts[] | select(.name == "pull-request-payload") | .archive_download_url')
-          [ -z "$DOWNLOAD_URL" ] && exit 1
-          wget --quiet --header="Authorization: token $GITHUB_TOKEN" -O pull_request_payload.zip $DOWNLOAD_URL || exit 2
-          unzip -p pull_request_payload.zip > pull_request_payload.json
-          [ -s pull_request_payload.json ] || exit 3
-          echo "::set-output name=pr_author_login::$(jq -r '.user.login // empty' pull_request_payload.json)"
-          echo "::set-output name=pr_number::$(jq -r '.number // empty' pull_request_payload.json)"
-          echo "::set-output name=pr_title::$(jq -r '.title // empty' pull_request_payload.json)"
-          echo "::set-output name=pr_source::$(jq -r '.head.label // empty' pull_request_payload.json)"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Send an informational status embed to Discord instead of the
-      # standard embeds that Discord sends. This embed will contain
-      # more information and we can fine tune when we actually want
-      # to send an embed.
-      - name: GitHub Actions Status Embed for Discord
-        uses: SebastiaanZ/github-status-embed-for-discord@v0.2.1
-        with:
-          # Webhook token
-          webhook_id: '1234567'
-          webhook_token: ${{ secrets.webhook_token }}
-
-          # We need to provide the information of the workflow that
-          # triggered this workflow instead of this workflow.
-          workflow_name: ${{ github.event.workflow_run.name }}
-          run_id: ${{ github.event.workflow_run.id }}
-          run_number: ${{ github.event.workflow_run.run_number }}
-          status: ${{ github.event.workflow_run.conclusion }}
-          sha: ${{ github.event.workflow_run.head_sha }}
-
-          # Now we can use the information extracted in the previous step:
-          pr_author_login: ${{ steps.pr_info.outputs.pr_author_login }}
-          pr_number: ${{ steps.pr_info.outputs.pr_number }}
-          pr_title: ${{ steps.pr_info.outputs.pr_title }}
-          pr_source: ${{ steps.pr_info.outputs.pr_source }}
-          issue_author_login: ${{ github.event.issue.user.login }}
-          issue_number: ${{ github.event.issue.number }}
-          issue_title: ${{ github.event.issue.title }}
-          issue_status: ${{ github.event.issue.state }}
-```
+### Reference
+https://github.com/marketplace/actions/github-actions-status-embed-for-discord
