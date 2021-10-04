@@ -4,17 +4,17 @@ _Send enhanced and informational GitHub Actions status embeds to Discord webhook
 ## How to Set up 
 1. Go to your discord channel setting
 <p align="center">
-  ![1](https://user-images.githubusercontent.com/69992661/135781315-04dfd52d-cdf2-42c4-9a7f-1d6495698489.png)
+  <img src=https://user-images.githubusercontent.com/69992661/135781315-04dfd52d-cdf2-42c4-9a7f-1d6495698489.png>
 </p>
 
 2. Add new webhook
 <p align="center">
-  ![2](https://user-images.githubusercontent.com/69992661/135781399-10a68f20-9f26-48bf-b79e-1bc7507081e3.png)
+  <img src=https://user-images.githubusercontent.com/69992661/135781399-10a68f20-9f26-48bf-b79e-1bc7507081e3.png>
 </p>
 
 3.Copy webhook URL
 <p align="center">
-  ![11](https://user-images.githubusercontent.com/69992661/135781964-d269d4d0-47fa-45e8-80d7-bcc4abc1d9e0.png)
+ <img src =https://user-images.githubusercontent.com/69992661/135781964-d269d4d0-47fa-45e8-80d7-bcc4abc1d9e0.png>
 </p>
 
 4.Go to Action right on the top of your repository and add your own workflow and might use example workflow file below.
@@ -45,7 +45,7 @@ When a workflow is triggered for a Pull Request or Issue, it's natural to includ
 Spot the difference:
 
 <p align="center">
-  ![4](https://user-images.githubusercontent.com/69992661/135782266-69f6eac1-7b61-4842-8bf1-9dcb944e4496.png)
+  <img src=https://user-images.githubusercontent.com/69992661/135782266-69f6eac1-7b61-4842-8bf1-9dcb944e4496.png>
 </p>
 
 
