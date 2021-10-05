@@ -32,13 +32,13 @@ def get_payload_pull_request(
 
     fields = [
         types.EmbedField(
-            name="PR Author",
+            name="Author",
             value=f"[{author}]({pull_request.author_url})",
             inline=True,
         ),
         types.EmbedField(
-            name="Workflow Run",
-            value=f"[{workflow_number}]({workflow.url})",
+            name="Repository",
+            value=f"[{workflow.repository}]({workflow.url})",
             inline=True,
         ),
         types.EmbedField(
@@ -50,8 +50,8 @@ def get_payload_pull_request(
 
     embed = types.Embed(
         title=(
-            f"[{workflow.repository}] Checks {workflow.status.adjective} on PR: "
-            f"#{pull_request.number} {pull_request.title}"
+            f"Pull Request: "
+            f"#{pull_request.title}"
         ),
         description=EMBED_DESCRIPTION.format(
             run_id=workflow.id, run_url=workflow.url, status_verb=workflow.status.verb,
@@ -82,13 +82,13 @@ def get_payload_issue(
 
     fields = [
         types.EmbedField(
-            name="Issue Author",
+            name="Author",
             value=f"[{author}]({issue.author_url})",
             inline=True,
         ),
         types.EmbedField(
-            name="Workflow Run",
-            value=f"[{workflow_number}]({workflow.url})",
+            name="Repository",
+            value=f"[{workflow.repository}]({workflow.url})",
             inline=True,
         ),
         types.EmbedField(
@@ -100,7 +100,7 @@ def get_payload_issue(
 
     embed = types.Embed(
         title=(
-            f"[{workflow.repository}] Checks {workflow.status.adjective} on issue: "
+            f"Issue: "
             f"#{issue.number} {issue.title}"
         ),
         description=EMBED_DESCRIPTION.format(
@@ -124,13 +124,13 @@ def get_payload(workflow: types.Workflow) -> types.WebhookPayload:
     """Create a WebhookPayload with information about a generic Workflow run."""
     embed_fields = [
         types.EmbedField(
-            name="Actor",
+            name="Author",
             value=f"[{workflow.actor}]({workflow.actor_url})",
             inline=True,
         ),
         types.EmbedField(
-            name="Workflow Run",
-            value=f"[{workflow.name} #{workflow.number}]({workflow.url})",
+            name="Repository",
+            value=f"[{workflow.repository}]({workflow.url})",
             inline=True,
         ),
         types.EmbedField(
@@ -141,7 +141,7 @@ def get_payload(workflow: types.Workflow) -> types.WebhookPayload:
     ]
 
     embed = types.Embed(
-        title=f"[{workflow.repository}] Workflow {workflow.status.adjective}",
+        title=f"Commit: ",
         description=EMBED_DESCRIPTION.format(
             run_id=workflow.id, run_url=workflow.url, status_verb=workflow.status.verb,
         ),
