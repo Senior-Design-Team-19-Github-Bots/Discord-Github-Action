@@ -170,18 +170,18 @@ class Workflow(TypedDataclass):
 class Webhook(TypedDataclass):
     """A simple dataclass to hold information about the target webhook."""
 
-    webhook_id: int
     webhook_token: str
+    
 
     @property
     def id(self) -> int:
-        """Return the snowflake ID of the webhook."""
-        return self.webhook_id
+        """Return the snowflake ID of the webhook."""  
+        return int(self.webhook_token.split("/")[5])
 
     @property
     def token(self) -> str:
         """Return the token of the webhook."""
-        return self.webhook_token
+        return self.webhook_token.split("/")[6]
 
     @property
     def url(self) -> str:
