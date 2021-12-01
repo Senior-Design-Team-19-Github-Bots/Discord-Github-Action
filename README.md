@@ -45,9 +45,8 @@ When a workflow is triggered for a Pull Request or Issue, it's natural to includ
 Spot the difference:
 
 <p align="center">
-  <img src=https://user-images.githubusercontent.com/69992661/135782266-69f6eac1-7b61-4842-8bf1-9dcb944e4496.png>
+  <img src=https://user-images.githubusercontent.com/69992661/144331012-caae61df-b763-4365-a1c7-6604fc488aab.png>
 </p>
-
 
 
 ## Usage
