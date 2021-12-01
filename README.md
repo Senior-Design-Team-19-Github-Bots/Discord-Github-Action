@@ -69,7 +69,7 @@ jobs:
 
     steps:
     - name: Run the GitHub Actions Status Embed Action
-      uses: SebastiaanZ/github-status-embed-for-discord@main
+      uses: Senior-Design-Team-19-Github-Bots/github-status-embed-for-discord@main
       with:
         # Discord webhook
         webhook_id: '1234567890'  # Has to be provided as a string
